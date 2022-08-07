@@ -11,7 +11,7 @@ import axios from 'axios'
         } = await axios.get(alchemyApi)
 
         const owners = ownerAddresses.reduce((acc, curr) => {
-            return acc += `${curr.ownerAddress}, ${curr.tokenBalances[0].balance}\r\n`
+            return acc += `${curr.ownerAddress},${curr.tokenBalances[0].balance}\r\n`
         }, '')
 
         fs.writeFileSync(`./snapshot_${Date.now()}.csv`, owners)

@@ -1,23 +1,20 @@
 import fs from "fs"
 import axios from 'axios'
-import { stringify } from 'csv';
-
 
 (async () => {
     try {
-        const r = await axios.get('https://eth-mainnet.g.alchemy.com/nft/v2/demo/getOwnersForCollection?contractAddress=0xd374410e9bb22f3771ffbd0b40a07c0cf44a04fc&withTokenBalances=true')
 
-        const owners = [];
+        const alchemyApi = 'https://eth-mainnet.g.alchemy.com/nft/v2/demo/getOwnersForCollection?contractAddress=0xd374410e9bb22f3771ffbd0b40a07c0cf44a04fc&withTokenBalances=true'
+
+        const r = await axios.get(alchemyApi)
+
+        let owners = '';
 
         for (let i = 0; i < r.data.ownerAddresses.length; i++) {
-            owners.push([r.data.ownerAddresses[i].ownerAddress, r.data.ownerAddresses[i].tokenBalances[0].balance]);
+            owners += `${r.data.ownerAddresses[i].ownerAddress}, ${r.data.ownerAddresses[i].tokenBalances[0].balance}\r\n`;
         }
 
-        stringify(owners, { header: false }, (err, out) => {
-            if (err) throw err
-            fs.writeFileSync('./snapshot.csv', out)
-        });
-
+        fs.writeFileSync(`./snapshot_${Date.now()}.csv`, owners)
     } catch (err) {
         console.error(err);
     }

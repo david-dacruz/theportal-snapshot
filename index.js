@@ -3,6 +3,7 @@ import axios from 'axios'
 
 (async () => {
     try {
+        console.time('snapshot');
 
         const alchemyApi = 'https://eth-mainnet.g.alchemy.com/nft/v2/demo/getOwnersForCollection?contractAddress=0xd374410e9bb22f3771ffbd0b40a07c0cf44a04fc&withTokenBalances=true'
 
@@ -14,6 +15,8 @@ import axios from 'axios'
         }, '')
 
         fs.writeFileSync(`./snapshot_${Date.now()}.csv`, owners)
+
+        console.timeEnd('snapshot');
     } catch (err) {
         console.error(err);
     }
